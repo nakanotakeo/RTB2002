@@ -3,7 +3,7 @@
 
     Const WRITETIMEOUT As Integer = 500 ' serial write timeout in ms
     Const READTIMEOUT As Integer = 3000 ' serial read timeout in ms
-    Const DATAPOINTS As Integer = 10000 ' number of waveform data points (with "ACQ:HRES")
+    Const DATAPOINTS As Integer = 2408 ' number of waveform data points (with "ACQ:HRES")
 
     Const SERIALWAIT As Integer = 1200   ' wait time between data send req & read
     Const CURAVGWAIT As Integer = 100
