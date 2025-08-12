@@ -43,6 +43,8 @@ Partial Class RTBmain
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxFileComment = New System.Windows.Forms.TextBox()
         Me.ButtonDataSave = New System.Windows.Forms.Button()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -50,11 +52,11 @@ Partial Class RTBmain
         'StatusStrip1
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabelL, Me.ToolStripStatusLabel2})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 629)
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabelL, Me.ToolStripStatusLabel2, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel3})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 627)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 19, 0)
-        Me.StatusStrip1.Size = New System.Drawing.Size(1112, 24)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1112, 26)
         Me.StatusStrip1.TabIndex = 0
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -62,21 +64,21 @@ Partial Class RTBmain
         '
         Me.StatusLabelL.AutoSize = False
         Me.StatusLabelL.Name = "StatusLabelL"
-        Me.StatusLabelL.Size = New System.Drawing.Size(400, 18)
+        Me.StatusLabelL.Size = New System.Drawing.Size(400, 20)
         Me.StatusLabelL.Text = "Connecting Oscillo."
         Me.StatusLabelL.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ToolStripStatusLabel2
         '
         Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(0, 16)
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(0, 20)
         '
         'ButtonLeftRunStop
         '
         Me.ButtonLeftRunStop.Enabled = False
         Me.ButtonLeftRunStop.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonLeftRunStop.Location = New System.Drawing.Point(20, 150)
-        Me.ButtonLeftRunStop.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonLeftRunStop.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonLeftRunStop.Name = "ButtonLeftRunStop"
         Me.ButtonLeftRunStop.Size = New System.Drawing.Size(167, 31)
         Me.ButtonLeftRunStop.TabIndex = 1
@@ -92,7 +94,7 @@ Partial Class RTBmain
         Me.ButtonGetWaveData.Enabled = False
         Me.ButtonGetWaveData.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonGetWaveData.Location = New System.Drawing.Point(687, 19)
-        Me.ButtonGetWaveData.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonGetWaveData.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonGetWaveData.Name = "ButtonGetWaveData"
         Me.ButtonGetWaveData.Size = New System.Drawing.Size(167, 31)
         Me.ButtonGetWaveData.TabIndex = 6
@@ -103,7 +105,7 @@ Partial Class RTBmain
         '
         Me.PictureBox1.BackColor = System.Drawing.SystemColors.Window
         Me.PictureBox1.Location = New System.Drawing.Point(400, 69)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(667, 344)
         Me.PictureBox1.TabIndex = 8
@@ -114,7 +116,7 @@ Partial Class RTBmain
         Me.ButtonLeftCurOFSRst.Enabled = False
         Me.ButtonLeftCurOFSRst.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonLeftCurOFSRst.Location = New System.Drawing.Point(20, 350)
-        Me.ButtonLeftCurOFSRst.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonLeftCurOFSRst.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonLeftCurOFSRst.Name = "ButtonLeftCurOFSRst"
         Me.ButtonLeftCurOFSRst.Size = New System.Drawing.Size(167, 31)
         Me.ButtonLeftCurOFSRst.TabIndex = 9
@@ -128,9 +130,9 @@ Partial Class RTBmain
         Me.LabelLeftC.Location = New System.Drawing.Point(20, 69)
         Me.LabelLeftC.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelLeftC.Name = "LabelLeftC"
-        Me.LabelLeftC.Size = New System.Drawing.Size(291, 53)
+        Me.LabelLeftC.Size = New System.Drawing.Size(342, 53)
         Me.LabelLeftC.TabIndex = 11
-        Me.LabelLeftC.Text = "Left Cathode"
+        Me.LabelLeftC.Text = "Single Cathode"
         '
         'LabelLeftCPower
         '
@@ -160,7 +162,7 @@ Partial Class RTBmain
         Me.ButtonClrWaveData.Enabled = False
         Me.ButtonClrWaveData.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonClrWaveData.Location = New System.Drawing.Point(900, 19)
-        Me.ButtonClrWaveData.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonClrWaveData.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonClrWaveData.Name = "ButtonClrWaveData"
         Me.ButtonClrWaveData.Size = New System.Drawing.Size(167, 31)
         Me.ButtonClrWaveData.TabIndex = 19
@@ -171,7 +173,7 @@ Partial Class RTBmain
         '
         Me.ButtonSelFolder.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonSelFolder.Location = New System.Drawing.Point(20, 462)
-        Me.ButtonSelFolder.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonSelFolder.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonSelFolder.Name = "ButtonSelFolder"
         Me.ButtonSelFolder.Size = New System.Drawing.Size(167, 31)
         Me.ButtonSelFolder.TabIndex = 20
@@ -182,7 +184,7 @@ Partial Class RTBmain
         '
         Me.TextBoxFilePrefix.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TextBoxFilePrefix.Location = New System.Drawing.Point(358, 466)
-        Me.TextBoxFilePrefix.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TextBoxFilePrefix.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxFilePrefix.MaxLength = 12
         Me.TextBoxFilePrefix.Name = "TextBoxFilePrefix"
         Me.TextBoxFilePrefix.Size = New System.Drawing.Size(165, 27)
@@ -228,7 +230,7 @@ Partial Class RTBmain
         '
         Me.TextBoxFileComment.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TextBoxFileComment.Location = New System.Drawing.Point(115, 507)
-        Me.TextBoxFileComment.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TextBoxFileComment.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxFileComment.MaxLength = 80
         Me.TextBoxFileComment.Name = "TextBoxFileComment"
         Me.TextBoxFileComment.Size = New System.Drawing.Size(757, 27)
@@ -239,12 +241,24 @@ Partial Class RTBmain
         Me.ButtonDataSave.Enabled = False
         Me.ButtonDataSave.Font = New System.Drawing.Font("MS UI Gothic", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ButtonDataSave.Location = New System.Drawing.Point(932, 455)
-        Me.ButtonDataSave.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonDataSave.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonDataSave.Name = "ButtonDataSave"
         Me.ButtonDataSave.Size = New System.Drawing.Size(135, 75)
         Me.ButtonDataSave.TabIndex = 26
         Me.ButtonDataSave.Text = "Data Save"
         Me.ButtonDataSave.UseVisualStyleBackColor = True
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(152, 20)
+        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        '
+        'ToolStripStatusLabel3
+        '
+        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
+        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(152, 20)
+        Me.ToolStripStatusLabel3.Text = "ToolStripStatusLabel3"
         '
         'RTBmain
         '
@@ -267,7 +281,7 @@ Partial Class RTBmain
         Me.Controls.Add(Me.ButtonGetWaveData)
         Me.Controls.Add(Me.ButtonLeftRunStop)
         Me.Controls.Add(Me.StatusStrip1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "RTBmain"
         Me.Text = "RTB2002S"
         Me.StatusStrip1.ResumeLayout(False)
@@ -298,4 +312,6 @@ Partial Class RTBmain
     Protected Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxFileComment As TextBox
     Friend WithEvents ButtonDataSave As Button
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
 End Class

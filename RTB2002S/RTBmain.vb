@@ -1,12 +1,12 @@
 ﻿Public Class RTBmain
-    Const RBUFSIZE As Integer = 50000   ' read buffer in byte
+    Const RBUFSIZE As Integer = 30000   ' read buffer in byte
 
     Const WRITETIMEOUT As Integer = 500 ' serial write timeout in ms
     Const READTIMEOUT As Integer = 3000 ' serial read timeout in ms
-    Const DATAPOINTS As Integer = 2408 ' number of waveform data points (with "ACQ:HRES")
+    Const DATAPOINTS As Integer = 10000 ' max number of waveform data points
+    Const DATALENGTH As Integer = 20007 ' max number of returning bytes by CHANm:DATA?
 
-    Const SERIALWAIT As Integer = 1200   ' wait time between data send req & read
-    Const CURAVGWAIT As Integer = 100
+    Const CURAVGWAIT As Integer = 20
 
     Dim ComP As IO.Ports.SerialPort = Nothing
 
@@ -25,6 +25,10 @@
 
     Dim LeftVPoint(DATAPOINTS) As UInt16
     Dim LeftIPoint(DATAPOINTS) As UInt16
+
+    Dim wdpnumber As Integer
+    Dim wdporder As Integer
+    Dim wdlength As Integer
 
     Dim LeftVScale As WaveDataScale
     Dim LeftIscale As WaveDataScale
@@ -67,6 +71,7 @@
 
             ComP.WriteLine("*idn?")
             readstr = ComP.ReadLine()
+            StatusLabelL.Text = readstr
 
             ' FORM Initialization
             ComP.WriteLine("form uint,16")
@@ -80,6 +85,12 @@
             ComP.WriteLine("chan:data:poin?")
             readstr = ComP.ReadLine()
 
+            wdpnumber = Integer.Parse(readstr)
+            wdporder = readstr.Length()
+            wdlength = 2 + wdporder + wdpnumber * 2
+            If wdpnumber > DATAPOINTS Then
+                MsgBox("Load: wdpnumber exceed DATAPOINTS.")
+            End If
 
             ButtonLeftCurOFSRst.Enabled = True
 
@@ -93,7 +104,6 @@
             ComP = Nothing
         End Try
 
-        StatusLabelL.Text = readstr
 
         ButtonGetWaveData.Enabled = ButtonLeftCurOFSRst.Enabled
 
@@ -101,7 +111,7 @@
 
         G = PictureBox1.CreateGraphics
 
-        G.ScaleTransform(PictureBox1.Width / DATAPOINTS, PictureBox1.Height / 65535)
+        G.ScaleTransform(PictureBox1.Width / wdpnumber, PictureBox1.Height / 65535)
 
         Dim dashValues() As Single = {80, 40, 80, 40}
         P(0) = New Pen(Color.Red, 1)
@@ -139,8 +149,8 @@
             Dim ndText As String = readstr.Substring(pos0 + 1, posE - pos0 - 1)
             nData = Integer.Parse(ndText)
 
-            If nData <> xpoint Then
-                MsgBox("GetWaveData: xpoint and nData differs.")
+            If nData <> wdpnumber Then
+                MsgBox("GetWaveData: xpoint and wdpnumber differs.")
             End If
 
             sendcmd = "chan" & ch & ":pos?"
@@ -173,8 +183,18 @@
 
             sendcmd = "CHAN" & ch & ":DATA?"
             comport.WriteLine(sendcmd)
-            Threading.Thread.Sleep(SERIALWAIT)
-            Dim rbyte As Integer = comport.Read(rBuf, 0, RBUFSIZE)
+
+            Dim rbtotal As Integer = 0
+            While rbtotal < wdlength
+                Dim rbyte As Integer = comport.Read(rBuf, rbtotal, wdlength - rbtotal)
+                If rbyte <= 0 Then
+                    Throw New TimeoutException("The read does Not exceed")
+                End If
+                rbtotal += rbyte
+            End While
+            ' Threading.Thread.Sleep(SERIALWAIT)
+            ' StatusLabelL.Text = rbtotal.ToString()
+
 
         Catch ex As TimeoutException
             StatusLabelL.Text = "command timed out."
@@ -271,7 +291,7 @@
     End Sub
 
     Private Sub ButtonGetWaveData_Click(sender As Object, e As EventArgs) Handles ButtonGetWaveData.Click
-        Dim xPoints As Integer = DATAPOINTS
+        Dim xPoints As Integer = wdpnumber
 
         ButtonGetWaveData.Text = "Obtaining..."
 
@@ -295,7 +315,7 @@
     End Sub
 
     Private Sub DrawWaveForm(gScr As Graphics, vWV() As UInt16, vPara As WaveDataScale, iWV() As UInt16, iPara As WaveDataScale)
-        Dim xPoints As Integer = DATAPOINTS
+        Dim xPoints As Integer = wdpnumber
 
         Dim vScrP(xPoints - 1) As Drawing.Point
         Dim iScrP(xPoints - 1) As Drawing.Point
@@ -308,12 +328,12 @@
         gScr.Clear(Color.White)
 
         Dim vLev As Integer = CUInt(32767 - vPara.pos * 6554)
-        gScr.DrawLine(P(0), 0, vLev, DATAPOINTS, vLev)
+        gScr.DrawLine(P(0), 0, vLev, wdpnumber, vLev)
 
         gScr.DrawLines(P(1), vScrP)
 
         Dim iLev As Integer = CUInt(32767 - iPara.pos * 6554)
-        gScr.DrawLine(P(2), 0, iLev, DATAPOINTS, iLev)
+        gScr.DrawLine(P(2), 0, iLev, wdpnumber, iLev)
 
         gScr.DrawLines(P(3), iScrP)
 
@@ -357,7 +377,7 @@
             PrintLine(fNo, "# " & TextBoxFileComment.Text)
             PrintLine(fNo, "# ")
 
-            textline = "# " & "Left Curent OFS: "
+            textline = "# " & "Curent Offset: "
             If LeftIOFS = Nothing Then
                 textline &= "NOT AVAILABLE"
             Else
@@ -366,13 +386,12 @@
             End If
             PrintLine(fNo, textline)
 
-            PrintLine(fNo, textline)
             PrintLine(fNo, "# ")
 
 
             PrintLine(fNo, "# Time(s), Voltage(V), Current(A)")
 
-            For i As Integer = 0 To DATAPOINTS - 1
+            For i As Integer = 0 To wdpnumber - 1
                 Dim val As Double
 
                 val = LeftVScale.xorigin + i * LeftVScale.xinc
@@ -401,7 +420,7 @@
     End Sub
 
     Private Sub ClearWaveData()
-        Dim xPoints As Integer = DATAPOINTS
+        Dim xPoints As Integer = wdpnumber
 
         Array.Clear(LeftVPoint, 0, xPoints)
         Array.Clear(LeftIPoint, 0, xPoints)
