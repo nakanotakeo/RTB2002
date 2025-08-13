@@ -12,6 +12,11 @@
 
     Dim DataPath As String = Nothing
 
+    Dim VchStr As String = "1"
+    Dim IchStr As String = "2"
+
+    Dim FreqStr As String
+
     Dim G As Graphics
     Dim P(4) As Pen
 
@@ -48,11 +53,15 @@
         comPask = New COMportASK
         comPask.ShowDialog()
 
+        VchStr = comPask.TextBoxLeftVCh.Text
+        IchStr = comPask.TextBoxLeftICh.Text
+
         ' open COM ports
         Dim ComPtext As String
         Dim readstr As String = ""
 
         ComPtext = comPask.TextBoxLeftCOsc.Text
+        FreqStr = Me.TextBoxFreq.Text
 
         ComP = New IO.Ports.SerialPort()
         Try
@@ -73,12 +82,11 @@
             readstr = ComP.ReadLine()
             StatusLabelL.Text = readstr
 
-            ' FORM Initialization
+            ' waveform data settings
             ComP.WriteLine("form uint,16")
             ComP.WriteLine("form:bord lsbf")
 
             ComP.WriteLine("acq:hres")
-            '            ComP.WriteLine("tim:scal 2e-6")
             ComP.WriteLine("acq:poin:10kSa")
             ComP.WriteLine("chan:data:poin dmax")
 
@@ -91,6 +99,15 @@
             If wdpnumber > DATAPOINTS Then
                 MsgBox("Load: wdpnumber exceed DATAPOINTS.")
             End If
+
+            'ComP.WriteLine("calc:math1:expr:def?")
+            'readstr = ComP.ReadLine()
+            'ComP.WriteLine("calc:math2:expr:def?")
+            'readstr = ComP.ReadLine()
+            'ComP.WriteLine("calc:math3:expr:def?")
+            'readstr = ComP.ReadLine()
+            'ComP.WriteLine("calc:math4:expr:def?")
+            'readstr = ComP.ReadLine()
 
             ButtonLeftCurOFSRst.Enabled = True
 
@@ -228,14 +245,14 @@
     End Sub
 
     Private Sub ButtonLeftCurOFSRst_Click(sender As Object, e As EventArgs) Handles ButtonLeftCurOFSRst.Click
-        SetCurrentBase(ComP, comPask.TextBoxLeftICh.Text, LeftIOFS, LabelLeftCurOFS, ButtonLeftRunStop)
+        SetCurrentBase(ComP, LeftIOFS, LabelLeftCurOFS, ButtonLeftRunStop)
     End Sub
 
-    Private Sub SetCurrentBase(comport As IO.Ports.SerialPort, Ich As String, ByRef curOFS As Double,
+    Private Sub SetCurrentBase(comport As IO.Ports.SerialPort, ByRef curOFS As Double,
                                ByRef labelCurOFS As Windows.Forms.Label, ByRef buttonRunstop As Windows.Forms.Button)
         Dim readstr As String = ""
         Try
-            comport.WriteLine("meas2:sour ch" & Ich)
+            comport.WriteLine("meas2:sour ch" & IchStr)
             comport.WriteLine("meas2:main mean")
             comport.WriteLine("meas2:enab on")
 
@@ -249,11 +266,28 @@
                 Threading.Thread.Sleep(CURAVGWAIT)
             Next i
             curOFS /= 10
+            comport.WriteLine("meas2:enab off")
 
             Dim iAvg As String = curOFS.ToString
 
-            comport.WriteLine("calc:math1:expr:def ""SUB(CH" & Ich & "," & iAvg & ") in A""")
-            comport.WriteLine("meas2:enab off")
+            ' math settings
+            comport.WriteLine("calc:math1:expr:def ""SUB(CH" & IchStr & "," & iAvg & ") in A""")
+            comport.WriteLine("calc:math2:expr:def ""MUL(CH" & VchStr & ",MA1) in W""")
+            comport.WriteLine("calc:math3:expr:def ""INT(MA2) in J""")
+            comport.WriteLine("calc:math4:expr:def ""MUL(MA3," & Me.FreqStr & ") in W""")
+            comport.WriteLine("calc:math1:lab SubCur")
+            comport.WriteLine("calc:math2:lab InstPow")
+            comport.WriteLine("calc:math3:lab Epulse")
+            comport.WriteLine("calc:math4:lab AvgPow")
+            comport.WriteLine("calc:math4:stat ON")
+            comport.WriteLine("calc:math4:lab ON")
+
+            'comport.WriteLine("calc:math2:lab?")
+            'readstr = comport.ReadLine()
+
+            comport.WriteLine("meas1:sour MA4")
+            comport.WriteLine("meas1:main peak")
+            comport.WriteLine("meas1:enab on")
 
             labelCurOFS.Text = curOFS.ToString("0.00E0") & " A"
 
@@ -279,8 +313,20 @@
         End If
     End Sub
 
+    Private Sub TextBoxFreq_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFreq.TextChanged
+        Dim freq As Integer
+        If Not Integer.TryParse(Me.TextBoxFreq.Text, freq) Then
+            Me.TextBoxFreq.Text = FreqStr
+        End If
+    End Sub
+
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Dim readstr As String = ""
+        If FreqStr <> Me.TextBoxFreq.Text Then
+            FreqStr = Me.TextBoxFreq.Text
+            ComP.WriteLine("calc:math4:expr:def ""MUL(MA3," & FreqStr & ") in W""")
+        End If
+
         If ButtonLeftRunStop.Text = "Running" Then
             ComP.WriteLine("meas1:res?")
             readstr = ComP.ReadLine()
@@ -377,7 +423,7 @@
             PrintLine(fNo, "# " & TextBoxFileComment.Text)
             PrintLine(fNo, "# ")
 
-            textline = "# " & "Curent Offset: "
+            textline = "# " & "Curent Offset:  "
             If LeftIOFS = Nothing Then
                 textline &= "NOT AVAILABLE"
             Else

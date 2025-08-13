@@ -43,8 +43,8 @@ Partial Class RTBmain
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBoxFileComment = New System.Windows.Forms.TextBox()
         Me.ButtonDataSave = New System.Windows.Forms.Button()
-        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.LabelFreq = New System.Windows.Forms.Label()
+        Me.TextBoxFreq = New System.Windows.Forms.TextBox()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -52,7 +52,7 @@ Partial Class RTBmain
         'StatusStrip1
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabelL, Me.ToolStripStatusLabel2, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel3})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabelL, Me.ToolStripStatusLabel2})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 627)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 19, 0)
@@ -136,7 +136,7 @@ Partial Class RTBmain
         '
         'LabelLeftCPower
         '
-        Me.LabelLeftCPower.Font = New System.Drawing.Font("MS UI Gothic", 54.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.LabelLeftCPower.Font = New System.Drawing.Font("MS UI Gothic", 48.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.LabelLeftCPower.ForeColor = System.Drawing.Color.Blue
         Me.LabelLeftCPower.Location = New System.Drawing.Point(27, 200)
         Me.LabelLeftCPower.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
@@ -248,23 +248,36 @@ Partial Class RTBmain
         Me.ButtonDataSave.Text = "Data Save"
         Me.ButtonDataSave.UseVisualStyleBackColor = True
         '
-        'ToolStripStatusLabel1
+        'LabelFreq
         '
-        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(152, 20)
-        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        Me.LabelFreq.AutoSize = True
+        Me.LabelFreq.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.LabelFreq.Location = New System.Drawing.Point(18, 24)
+        Me.LabelFreq.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelFreq.Name = "LabelFreq"
+        Me.LabelFreq.Size = New System.Drawing.Size(151, 20)
+        Me.LabelFreq.TabIndex = 27
+        Me.LabelFreq.Text = "Frequency (Hz)"
         '
-        'ToolStripStatusLabel3
+        'TextBoxFreq
         '
-        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
-        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(152, 20)
-        Me.ToolStripStatusLabel3.Text = "ToolStripStatusLabel3"
+        Me.TextBoxFreq.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.TextBoxFreq.Location = New System.Drawing.Point(208, 21)
+        Me.TextBoxFreq.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBoxFreq.MaxLength = 12
+        Me.TextBoxFreq.Name = "TextBoxFreq"
+        Me.TextBoxFreq.Size = New System.Drawing.Size(165, 27)
+        Me.TextBoxFreq.TabIndex = 28
+        Me.TextBoxFreq.Text = "200"
+        Me.TextBoxFreq.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'RTBmain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1112, 653)
+        Me.Controls.Add(Me.TextBoxFreq)
+        Me.Controls.Add(Me.LabelFreq)
         Me.Controls.Add(Me.ButtonDataSave)
         Me.Controls.Add(Me.TextBoxFileComment)
         Me.Controls.Add(Me.Label2)
@@ -312,6 +325,6 @@ Partial Class RTBmain
     Protected Friend WithEvents Label2 As Label
     Friend WithEvents TextBoxFileComment As TextBox
     Friend WithEvents ButtonDataSave As Button
-    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
-    Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
+    Friend WithEvents LabelFreq As Label
+    Friend WithEvents TextBoxFreq As TextBox
 End Class
