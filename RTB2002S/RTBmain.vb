@@ -1,5 +1,5 @@
 ﻿Public Class RTBmain
-    Const RBUFSIZE As Integer = 30000   ' read buffer in byte
+    Const RBUFSIZE As Integer = 25000   ' read buffer in byte
 
     Const WRITETIMEOUT As Integer = 500 ' serial write timeout in ms
     Const READTIMEOUT As Integer = 3000 ' serial read timeout in ms
