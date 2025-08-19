@@ -66,11 +66,6 @@
         ComP = New IO.Ports.SerialPort()
         Try
             ComP.PortName = ComPtext
-            ComP.BaudRate = 9600
-            ComP.Parity = IO.Ports.Parity.None
-            ComP.DataBits = 8
-            ComP.StopBits = IO.Ports.StopBits.One
-            ComP.Handshake = IO.Ports.Handshake.RequestToSend
             ComP.ReadBufferSize = RBUFSIZE
 
             ComP.Open()
@@ -94,6 +89,11 @@
             readstr = ComP.ReadLine()
 
             wdpnumber = Integer.Parse(readstr)
+            If wdpnumber = 0 Then
+                MsgBox("データ数を取得できませんでした")
+                Me.Close()
+            End If
+
             wdporder = readstr.Length()
             wdlength = 2 + wdporder + wdpnumber * 2
             If wdpnumber > DATAPOINTS Then
