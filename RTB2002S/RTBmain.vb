@@ -152,7 +152,8 @@
         comport.DiscardOutBuffer()
 
         Try
-            Dim sendcmd As String = "chan" & ch & ":data:head?"
+            Dim sendcmd As String
+            sendcmd = "chan" & ch & ":data:head?"
 
             comport.WriteLine(sendcmd)
             Dim readstr As String = comport.ReadLine()
@@ -339,14 +340,17 @@
     Private Sub ButtonGetWaveData_Click(sender As Object, e As EventArgs) Handles ButtonGetWaveData.Click
         Dim xPoints As Integer = wdpnumber
 
-        ButtonGetWaveData.Text = "Obtaining..."
 
         If ButtonLeftCurOFSRst.Enabled = True Then
             Array.Clear(LeftVPoint, 0, xPoints)
             Array.Clear(LeftIPoint, 0, xPoints)
 
+            ButtonGetWaveData.Text = "Obtaining..."
+
+            ComP.WriteLine("acq:stat stop")
             Call GetWaveData(ComP, comPask.TextBoxLeftVCh.Text, xPoints, LeftVPoint, LeftVScale)
             Call GetWaveData(ComP, comPask.TextBoxLeftICh.Text, xPoints, LeftIPoint, LeftIscale)
+            ComP.WriteLine("acq:stat run")
 
             Call DrawWaveForm(G, LeftVPoint, LeftVScale, LeftIPoint, LeftIscale)
         End If
