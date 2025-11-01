@@ -1,5 +1,5 @@
 ﻿Public Class RTBmain
-    Const RBUFSIZE As Integer = 30000   ' read buffer in byte
+    Const RBUFSIZE As Integer = 25000   ' read buffer in byte
 
     Const WRITETIMEOUT As Integer = 500 ' serial write timeout in ms
     Const READTIMEOUT As Integer = 3000 ' serial read timeout in ms
@@ -66,11 +66,6 @@
         ComP = New IO.Ports.SerialPort()
         Try
             ComP.PortName = ComPtext
-            ComP.BaudRate = 9600
-            ComP.Parity = IO.Ports.Parity.None
-            ComP.DataBits = 8
-            ComP.StopBits = IO.Ports.StopBits.One
-            ComP.Handshake = IO.Ports.Handshake.RequestToSend
             ComP.ReadBufferSize = RBUFSIZE
 
             ComP.Open()
@@ -94,6 +89,11 @@
             readstr = ComP.ReadLine()
 
             wdpnumber = Integer.Parse(readstr)
+            If wdpnumber = 0 Then
+                MsgBox("データ数を取得できませんでした")
+                Me.Close()
+            End If
+
             wdporder = readstr.Length()
             wdlength = 2 + wdporder + wdpnumber * 2
             If wdpnumber > DATAPOINTS Then
@@ -152,7 +152,8 @@
         comport.DiscardOutBuffer()
 
         Try
-            Dim sendcmd As String = "chan" & ch & ":data:head?"
+            Dim sendcmd As String
+            sendcmd = "chan" & ch & ":data:head?"
 
             comport.WriteLine(sendcmd)
             Dim readstr As String = comport.ReadLine()
@@ -339,14 +340,17 @@
     Private Sub ButtonGetWaveData_Click(sender As Object, e As EventArgs) Handles ButtonGetWaveData.Click
         Dim xPoints As Integer = wdpnumber
 
-        ButtonGetWaveData.Text = "Obtaining..."
 
         If ButtonLeftCurOFSRst.Enabled = True Then
             Array.Clear(LeftVPoint, 0, xPoints)
             Array.Clear(LeftIPoint, 0, xPoints)
 
+            ButtonGetWaveData.Text = "Obtaining..."
+
+            ComP.WriteLine("acq:stat stop")
             Call GetWaveData(ComP, comPask.TextBoxLeftVCh.Text, xPoints, LeftVPoint, LeftVScale)
             Call GetWaveData(ComP, comPask.TextBoxLeftICh.Text, xPoints, LeftIPoint, LeftIscale)
+            ComP.WriteLine("acq:stat run")
 
             Call DrawWaveForm(G, LeftVPoint, LeftVScale, LeftIPoint, LeftIscale)
         End If
